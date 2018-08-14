@@ -1,0 +1,15 @@
+{
+  "name": "twitterbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arghyadeep Kundu",
+  "license": "MIT",
+  "dependencies": {
+    "arraylist": "^0.1.0",
+    "twitter": "^1.7.1"
+  }
+}
