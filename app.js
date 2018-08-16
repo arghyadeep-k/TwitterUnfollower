@@ -7,6 +7,8 @@ var T = new Twitter(config);
 var friendsList = new ArrayList();
 var followersList = new ArrayList();
 
+var count = 0;
+
 //Friends list
 T.get('friends/ids',function(err,data,response){
     if(!err)
@@ -16,8 +18,29 @@ T.get('friends/ids',function(err,data,response){
         
         if(followersList.size() > 0)
         {
-            friendsList = friendsList.difference(followersList);  
+            friendsList = friendsList.difference(followersList); 
+            console.log(friendsList);  
             //console.log("In Friends section: " + friendsList.size());
+            for(let i=0; i<friendsList.size(); i++)
+            {
+                var userId = {user_id:friendsList[i]};
+                T.post('friendships/destroy',userId,function(err,data,response){
+                    if(!err)
+                    {
+                        T.get('users/lookup',userId,function(err,data,response)
+                        {
+                            if(!err)
+                                console.log(data.name + " (@"+data.screen_name+")" + " has been unfollowed.");
+                            else
+                                console.log(err);                                
+                        })
+                        count++;
+                    }
+                    else
+                        console.log(err);
+                })
+                console.log(count + " accounts were unfollowed.");
+            }
         }
     }
     else
@@ -35,9 +58,29 @@ T.get('followers/ids',function(err,data,response){
         
         if(friendsList.size() > 0)
         {
-            friendsList = friendsList.difference(followersList);     
+            friendsList = friendsList.difference(followersList);                          
             //console.log("In Followers section: " + friendsList.size());
-        }
+            for(let i=0; i<friendsList.size(); i++)
+            {
+                var userId = {user_id:friendsList[i]};
+                T.post('friendships/destroy',userId,function(err,data,response){
+                    if(!err)
+                    {
+                        T.get('users/lookup',userId,function(err,data,response)
+                        {
+                            if(!err)
+                                console.log(data.name + " (@"+data.screen_name+")" + " has been unfollowed.");
+                            else
+                                console.log(err);                                
+                        })
+                        count++;
+                    }
+                    else
+                        console.log(err);
+                })
+                console.log(count + " accounts were unfollowed.");
+            }
+        }        
     }
     else
     {
@@ -45,4 +88,4 @@ T.get('followers/ids',function(err,data,response){
     }
 })
 
-
+//T.post()
