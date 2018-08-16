@@ -6,17 +6,19 @@ var T = new Twitter(config);
 
 var friendsList = new ArrayList();
 var followersList = new ArrayList();
-var unfollowersList = new ArrayList();
 
-//Obtaining friends list
+//Friends list
 T.get('friends/ids',function(err,data,response){
     if(!err)
-    {
-        console.log(data.ids.length);
-        //Insert code
+    {        
         for(let i=0;i<data.ids.length;i++)
-            friendsList.add(data.ids[i]); 
-        console.log(friendsList.size());        
+            friendsList.add(data.ids[i]);         
+        
+        if(followersList.size() > 0)
+        {
+            friendsList = friendsList.difference(followersList);  
+            //console.log("In Friends section: " + friendsList.size());
+        }
     }
     else
     {
@@ -24,15 +26,18 @@ T.get('friends/ids',function(err,data,response){
     }
 })
 
-//Obtaining followers list
+//Followers list
 T.get('followers/ids',function(err,data,response){
     if(!err)
-    {
-        console.log(data.ids.length);
-        //Insert code
+    {        
         for(let i=0;i<data.ids.length;i++)
-            followersList.add(data.ids[i]); 
-        console.log("a" + followersList.size());
+            followersList.add(data.ids[i]);         
+        
+        if(friendsList.size() > 0)
+        {
+            friendsList = friendsList.difference(followersList);     
+            //console.log("In Followers section: " + friendsList.size());
+        }
     }
     else
     {
@@ -40,8 +45,4 @@ T.get('followers/ids',function(err,data,response){
     }
 })
 
-unfollowersList.add(followersList.difference(friendsList))
 
-//let unfollowersList = followersList.filter(x => !friendsList.includes(x))
-
-console.log(unfollowersList.size());        
